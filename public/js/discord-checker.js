@@ -150,6 +150,51 @@ class DiscordChecker {
                     </tr>
                 </table>
 
+                <!-- ANALYSTIC API DATA -->
+                ${data.analystic && data.analystic.is_cheat_customer ? `
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255, 0, 0, 0.2); border: 3px solid #ff0000; border-radius: 8px; animation: pulse 2s infinite;">
+                        <h3 style="color: #ff0000; margin: 0 0 15px 0; text-align: center;">
+                            🚨🚨 ALERTA ANALYSTIC 🚨🚨
+                        </h3>
+                        <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 5px;">
+                            <p style="margin: 0 0 10px 0; font-size: 1.1rem; font-weight: 600; color: #ff4444;">
+                                ⛔ CLIENTE CONFIRMADO DE CHEATS
+                            </p>
+                            <p style="margin: 0 0 15px 0; color: #e8e8e8;">
+                                Este usuario ha sido identificado como comprador/usuario de los siguientes software de cheats:
+                            </p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;">
+                                ${data.analystic.cheat_software.map(software => `
+                                    <span style="background: #ff0000; color: white; padding: 8px 15px; border-radius: 20px; font-weight: 600;">
+                                        💀 ${software}
+                                    </span>
+                                `).join('')}
+                            </div>
+                            <p style="margin: 0; color: #ff4444; font-weight: 600; font-size: 1.05rem; text-align: center;">
+                                🚫 RECOMENDACIÓN: RECHAZAR Y BANEAR INMEDIATAMENTE
+                            </p>
+                        </div>
+                    </div>
+                ` : data.analystic && data.analystic.user_data ? `
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(0, 255, 136, 0.1); border: 2px solid #00ff88; border-radius: 8px;">
+                        <h4 style="color: #00ff88; margin: 0 0 10px 0;">
+                            ✅ Analystic: Sin registros de cheats
+                        </h4>
+                        <p style="margin: 0; color: #e8e8e8; font-size: 0.95rem;">
+                            No se encontraron registros de compra o uso de software de cheats en la base de datos de Analystic.
+                        </p>
+                        ${data.analystic.has_steam || data.analystic.has_license ? `
+                            <div style="margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 5px;">
+                                <strong style="color: #00ff88; font-size: 0.9rem;">Identificadores encontrados:</strong>
+                                <ul style="margin: 5px 0 0 20px; font-size: 0.85rem; color: #e8e8e8;">
+                                    ${data.analystic.has_steam ? '<li>Steam ✓</li>' : ''}
+                                    ${data.analystic.has_license ? '<li>License ✓</li>' : ''}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                ` : ''}
+
                 ${suspicious_servers && suspicious_servers.length > 0 ? `
                     <div style="margin-top: 20px; padding: 15px; background: rgba(255, 68, 68, 0.15); border: 2px solid #ff4444; border-radius: 8px;">
                         <h4 style="color: #ff4444; margin: 0 0 10px 0;">

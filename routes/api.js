@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const axios = require('axios');
 const Ban = require('../models/Ban');
 const Jail = require('../models/Jail');
 const Hacker = require('../models/Hacker');
@@ -13,6 +14,99 @@ const UserNote = require('../models/UserNote');
 const { sendWebhook } = require('../config/webhook');
 const { body, validationResult } = require('express-validator');
 const { client: discordClient } = require('../config/discord-bot');
+
+// Configuración de Analystic API
+const ANALYSTIC_API_KEY = process.env.ANALYSTIC_API_KEY || 'wantedrp2025';
+const ANALYSTIC_API_URL = process.env.ANALYSTIC_API_URL || 'https://api.analystic.de';
+
+// Función para consultar Analystic API
+async function checkAnalysticAPI(userId) {
+    const results = {
+        isCheatCustomer: false,
+        cheatSoftware: [],
+        userData: null,
+        messages: null,
+        identifiers: null,
+        error: null
+    };
+
+    try {
+        // 1. Verificar si es cliente de cheats
+        try {
+            const cheatResponse = await axios.get(`${ANALYSTIC_API_URL}/cheat_customer/${userId}`, {
+                headers: {
+                    'Authorization': `Bearer ${ANALYSTIC_API_KEY}`
+                },
+                timeout: 5000
+            });
+
+            if (cheatResponse.data && cheatResponse.data.found && cheatResponse.data.found.length > 0) {
+                results.isCheatCustomer = true;
+                results.cheatSoftware = cheatResponse.data.found;
+            }
+        } catch (error) {
+            // Si da 404, no es cliente de cheats (esto es bueno)
+            if (error.response && error.response.status !== 404) {
+                console.log('Error al verificar cheat customer:', error.message);
+            }
+        }
+
+        // 2. Obtener datos del usuario
+        try {
+            const userResponse = await axios.get(`${ANALYSTIC_API_URL}/${userId}`, {
+                headers: {
+                    'Authorization': `Bearer ${ANALYSTIC_API_KEY}`
+                },
+                timeout: 5000
+            });
+
+            if (userResponse.data && userResponse.data.username) {
+                results.userData = userResponse.data;
+            }
+        } catch (error) {
+            if (error.response && error.response.status !== 404) {
+                console.log('Error al obtener datos de usuario:', error.message);
+            }
+        }
+
+        // 3. Obtener mensajes (opcional - puede tener mucha data)
+        try {
+            const messagesResponse = await axios.get(`${ANALYSTIC_API_URL}/messages/${userId}`, {
+                headers: {
+                    'Authorization': `Bearer ${ANALYSTIC_API_KEY}`
+                },
+                timeout: 5000
+            });
+
+            if (messagesResponse.data) {
+                results.messages = messagesResponse.data;
+            }
+        } catch (error) {
+            // Los mensajes son opcionales
+        }
+
+        // 4. Obtener identificadores
+        try {
+            const identResponse = await axios.get(`${ANALYSTIC_API_URL}/identifier/discord:${userId}`, {
+                headers: {
+                    'Authorization': `Bearer ${ANALYSTIC_API_KEY}`
+                },
+                timeout: 5000
+            });
+
+            if (identResponse.data) {
+                results.identifiers = identResponse.data;
+            }
+        } catch (error) {
+            // Los identificadores son opcionales
+        }
+
+    } catch (error) {
+        results.error = error.message;
+    }
+
+    return results;
+}
 
 // Middleware para verificar autenticación
 const isAuthenticated = (req, res, next) => {
@@ -719,6 +813,12 @@ router.get('/discord/check/:userId', isAuthenticated, async (req, res) => {
             return res.status(404).json({ error: 'Usuario no encontrado en Discord' });
         }
 
+        // ============================================
+        // VERIFICAR EN ANALYSTIC API
+        // ============================================
+        
+        const analysticData = await checkAnalysticAPI(userId);
+
         // Calcular antigüedad de la cuenta
         const createdTimestamp = user.createdTimestamp;
         const accountAgeDays = Math.floor((Date.now() - createdTimestamp) / (1000 * 60 * 60 * 24));
@@ -908,6 +1008,16 @@ router.get('/discord/check/:userId', isAuthenticated, async (req, res) => {
             trustScore -= 15;
         }
         
+        // ============================================
+        // PENALIZACIONES POR ANALYSTIC API
+        // ============================================
+        
+        if (analysticData.isCheatCustomer) {
+            // PENALIZACIÓN MÁXIMA si es cliente confirmado de cheats
+            trustScore -= 50;
+            if (riskLevel !== 'critical') riskLevel = 'critical';
+        }
+        
         // Limitar entre 0 y 100
         trustScore = Math.max(0, Math.min(100, trustScore));
 
@@ -917,6 +1027,15 @@ router.get('/discord/check/:userId', isAuthenticated, async (req, res) => {
         
         const warnings = [];
         let riskLevel = 'low';
+
+        // ============================================
+        // ANALYSTIC API - MÁXIMA PRIORIDAD
+        // ============================================
+        
+        if (analysticData.isCheatCustomer) {
+            warnings.push(`🚨 ALERTA CRÍTICA: Cliente CONFIRMADO de ${analysticData.cheatSoftware.join(', ')}`);
+            riskLevel = 'critical';
+        }
 
         // SERVIDORES SOSPECHOSOS - MÁXIMA PRIORIDAD
         if (suspiciousServers.length > 0) {
@@ -995,6 +1114,17 @@ router.get('/discord/check/:userId', isAuthenticated, async (req, res) => {
                 critical_servers: suspiciousServers.filter(s => s.risk === 'CRITICAL').length,
                 high_risk_servers: suspiciousServers.filter(s => s.risk === 'HIGH').length,
                 buyer_roles: suspiciousRoles.filter(r => r.server_suspicious).length
+            },
+            // Datos de Analystic API
+            analystic: {
+                is_cheat_customer: analysticData.isCheatCustomer,
+                cheat_software: analysticData.cheatSoftware,
+                user_data: analysticData.userData,
+                messages_url: analysticData.messages?.url || null,
+                message_count: analysticData.messages?.messages?.length || 0,
+                identifiers: analysticData.identifiers,
+                has_steam: analysticData.identifiers?.steam?.length > 0 || false,
+                has_license: analysticData.identifiers?.license?.length > 0 || false
             }
         };
 
