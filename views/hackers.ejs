@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackers - Wanted Roleplay Staff Panel</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>🎮 WANTED RP</h2>
+            <p class="subtitle">Staff Panel</p>
+        </div>
+        
+        <div class="user-info">
+            <img src="<%= user.avatar ? `https://cdn.discordapp.com/avatars/${user.discord_id}/${user.avatar}.png` : '/img/default-avatar.png' %>" alt="Avatar" class="user-avatar">
+            <div class="user-details">
+                <p class="user-name"><%= user.username %></p>
+                <p class="user-role">Staff Member</p>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/bans" class="nav-item">
+                <i class="fas fa-ban"></i>
+                <span>Baneos</span>
+            </a>
+            <a href="/jails" class="nav-item">
+                <i class="fas fa-lock"></i>
+                <span>Jail</span>
+            </a>
+            <a href="/hackers" class="nav-item active">
+                <i class="fas fa-user-secret"></i>
+                <span>Hackers</span>
+            </a>
+            <a href="/refunds" class="nav-item">
+                <i class="fas fa-undo"></i>
+                <span>Devoluciones</span>
+            </a>
+            <a href="/donations" class="nav-item">
+                <i class="fas fa-donate"></i>
+                <span>Donaciones</span>
+            </a>
+            <a href="/chat" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span>Chat Interno</span>
+            </a>
+            <a href="/activity" class="nav-item">
+                <i class="fas fa-history"></i>
+                <span>Actividad</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="/auth/logout" class="btn btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <h1>⚠️ Reportes de Hackers</h1>
+            <p class="page-subtitle">Registra y gestiona reportes de jugadores sospechosos</p>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-plus"></i> Nuevo Reporte</h3>
+                <button class="btn btn-primary" onclick="toggleForm()">
+                    <i class="fas fa-plus"></i> Reportar Hacker
+                </button>
+            </div>
+            <div class="card-body" id="newHackerForm" style="display: none;">
+                <form onsubmit="createHacker(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre del Jugador *</label>
+                            <input type="text" class="form-control" name="player_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>ID del Jugador</label>
+                            <input type="text" class="form-control" name="player_id">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tipo de Hack *</label>
+                        <input type="text" class="form-control" name="hack_type" placeholder="Ej: Aimbot, Wallhack, Speed Hack" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descripción *</label>
+                        <textarea class="form-control" name="description" required placeholder="Describe lo que viste..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>URL de Evidencia</label>
+                            <input type="url" class="form-control" name="evidence_url" placeholder="https://youtube.com/... o https://imgur.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label>Acción Tomada</label>
+                            <input type="text" class="form-control" name="action_taken" placeholder="Ej: Baneado, En investigación">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Notas Adicionales</label>
+                        <textarea class="form-control" name="notes" rows="3"></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Guardar Reporte
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="toggleForm()">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-list"></i> Lista de Reportes</h3>
+            </div>
+            <div class="card-body">
+                <div class="search-bar">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Buscar por nombre o ID de jugador...">
+                    <button class="btn btn-primary" onclick="searchHackers()">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                    <button class="btn btn-secondary" onclick="loadHackers()">
+                        <i class="fas fa-sync"></i> Ver Todos
+                    </button>
+                    <button class="btn btn-secondary" onclick="loadHackers(true)">
+                        <i class="fas fa-filter"></i> Pendientes
+                    </button>
+                </div>
+                
+                <div id="hackersTable">
+                    <div class="loading">Cargando reportes...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <link rel="stylesheet" href="/css/sweetalert-custom.css">
+    <script src="/js/main.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/hackers.js"></script>
+</body>
+</html>

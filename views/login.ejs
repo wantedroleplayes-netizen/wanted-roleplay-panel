@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Wanted Roleplay Staff Panel</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h1>🎮 WANTED ROLEPLAY</h1>
+                <p class="login-subtitle">Staff Management Panel</p>
+            </div>
+            
+            <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <% if (error === 'unauthorized') { %>
+                No tienes permisos para acceder al panel de staff.
+                <% } else { %>
+                Error al iniciar sesión. Por favor, intenta de nuevo.
+                <% } %>
+            </div>
+            <% } %>
+            
+            <div class="login-content">
+                <p class="login-description">
+                    Inicia sesión con tu cuenta de Discord para acceder al panel de gestión de staff.
+                </p>
+                
+                <a href="/auth/login" class="btn btn-discord">
+                    <i class="fab fa-discord"></i>
+                    Iniciar sesión con Discord
+                </a>
+                
+                <div class="login-info">
+                    <p><i class="fas fa-shield-alt"></i> Acceso exclusivo para miembros del staff</p>
+                    <p><i class="fas fa-lock"></i> Conexión segura mediante Discord OAuth</p>
+                </div>
+            </div>
+            
+            <div class="login-footer">
+                <p>&copy; 2025 Wanted Roleplay. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

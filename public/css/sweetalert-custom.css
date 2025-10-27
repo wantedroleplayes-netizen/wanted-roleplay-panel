@@ -1,0 +1,264 @@
+/* =========================== */
+/* SWEETALERT2 CUSTOM STYLES */
+/* =========================== */
+
+.swal2-popup {
+    background: #1a1a1a !important;
+    border: 1px solid #333 !important;
+    border-radius: 15px !important;
+    box-shadow: 0 0 50px rgba(0, 255, 136, 0.2) !important;
+    color: #ffffff !important;
+    padding: 2rem !important;
+}
+
+.swal2-title {
+    color: #ffffff !important;
+    font-size: 1.8rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 1rem !important;
+}
+
+.swal2-html-container {
+    color: #e8e8e8 !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+}
+
+.swal2-confirm {
+    background: linear-gradient(135deg, #00ff88, #00dd77) !important;
+    color: #0a0a0a !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 12px 30px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3) !important;
+}
+
+.swal2-confirm:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(0, 255, 136, 0.4) !important;
+}
+
+.swal2-cancel {
+    background: #2a2a2a !important;
+    color: #ffffff !important;
+    border: 1px solid #333 !important;
+    border-radius: 8px !important;
+    padding: 12px 30px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.swal2-cancel:hover {
+    background: #3a3a3a !important;
+    transform: translateY(-2px) !important;
+}
+
+.swal2-input, .swal2-textarea, .swal2-select {
+    background: #2a2a2a !important;
+    border: 1px solid #333 !important;
+    color: #ffffff !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.swal2-input:focus, .swal2-textarea:focus, .swal2-select:focus {
+    border-color: #00ff88 !important;
+    box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1) !important;
+    outline: none !important;
+}
+
+.swal2-validation-message {
+    background: rgba(255, 68, 68, 0.1) !important;
+    border: 1px solid #ff4444 !important;
+    color: #ff4444 !important;
+}
+
+.swal2-icon.swal2-success {
+    border-color: #00ff88 !important;
+}
+
+.swal2-icon.swal2-success [class^='swal2-success-line'] {
+    background-color: #00ff88 !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+    border-color: rgba(0, 255, 136, 0.3) !important;
+}
+
+.swal2-icon.swal2-error {
+    border-color: #ff4444 !important;
+}
+
+.swal2-icon.swal2-error [class^='swal2-x-mark-line'] {
+    background-color: #ff4444 !important;
+}
+
+.swal2-icon.swal2-warning {
+    border-color: #ffaa00 !important;
+    color: #ffaa00 !important;
+}
+
+.swal2-icon.swal2-info {
+    border-color: #00aaff !important;
+    color: #00aaff !important;
+}
+
+.swal2-icon.swal2-question {
+    border-color: #9b59b6 !important;
+    color: #9b59b6 !important;
+}
+
+/* Toast notifications */
+.swal2-toast {
+    background: #1a1a1a !important;
+    border: 1px solid #333 !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+.swal2-toast .swal2-title {
+    color: #ffffff !important;
+    font-size: 0.95rem !important;
+}
+
+.swal2-toast .swal2-success {
+    border-color: #00ff88 !important;
+}
+
+/* Loading spinner */
+.swal2-loader {
+    border-color: #00ff88 transparent #00ff88 transparent !important;
+}
+
+/* Close button */
+.swal2-close {
+    color: #e8e8e8 !important;
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.swal2-close:hover {
+    color: #ffffff !important;
+}
+
+/* Progress bar */
+.swal2-timer-progress-bar {
+    background: #00ff88 !important;
+}
+
+/* Animation improvements */
+.swal2-popup.swal2-show {
+    animation: swal2-show 0.3s ease-out !important;
+}
+
+.swal2-popup.swal2-hide {
+    animation: swal2-hide 0.2s ease-in !important;
+}
+
+/* Scrollbar for modal content */
+.swal2-html-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.swal2-html-container::-webkit-scrollbar-track {
+    background: #2a2a2a;
+    border-radius: 4px;
+}
+
+.swal2-html-container::-webkit-scrollbar-thumb {
+    background: #3a3a3a;
+    border-radius: 4px;
+}
+
+.swal2-html-container::-webkit-scrollbar-thumb:hover {
+    background: #00ff88;
+}
+
+/* Premium modal styles */
+.swal2-popup.premium-modal {
+    border: 2px solid #ffd700 !important;
+    box-shadow: 0 0 60px rgba(255, 215, 0, 0.3) !important;
+}
+
+/* Danger action modal */
+.swal2-popup.danger-modal {
+    border: 2px solid #ff4444 !important;
+    box-shadow: 0 0 40px rgba(255, 68, 68, 0.3) !important;
+}
+
+.swal2-popup.danger-modal .swal2-confirm {
+    background: linear-gradient(135deg, #ff4444, #dd3333) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3) !important;
+}
+
+/* Info tables inside modals */
+.swal2-html-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.swal2-html-container table td {
+    padding: 8px;
+    border-bottom: 1px solid #333;
+}
+
+.swal2-html-container table td:first-child {
+    font-weight: 600;
+    color: #00ff88;
+    width: 40%;
+}
+
+.swal2-html-container table td:last-child {
+    color: #e8e8e8;
+}
+
+/* Badges in modals */
+.modal-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 2px;
+}
+
+.modal-badge.success {
+    background: rgba(0, 255, 136, 0.2);
+    color: #00ff88;
+    border: 1px solid #00ff88;
+}
+
+.modal-badge.danger {
+    background: rgba(255, 68, 68, 0.2);
+    color: #ff4444;
+    border: 1px solid #ff4444;
+}
+
+.modal-badge.warning {
+    background: rgba(255, 170, 0, 0.2);
+    color: #ffaa00;
+    border: 1px solid #ffaa00;
+}
+
+.modal-badge.info {
+    background: rgba(0, 170, 255, 0.2);
+    color: #00aaff;
+    border: 1px solid #00aaff;
+}
+
+/* Special animations for modals */
+@keyframes modalPulse {
+    0%, 100% {
+        box-shadow: 0 0 50px rgba(0, 255, 136, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 60px rgba(0, 255, 136, 0.4);
+    }
+}
+
+.swal2-popup.animate-pulse {
+    animation: modalPulse 2s infinite;
+}

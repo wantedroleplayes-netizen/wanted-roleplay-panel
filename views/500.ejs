@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Error del Servidor | Wanted Roleplay</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h1 style="font-size: 5rem; margin-bottom: 10px;">500</h1>
+                <h2 style="margin-bottom: 10px;">Error del Servidor</h2>
+                <p class="login-subtitle">Algo salió mal en nuestro servidor</p>
+            </div>
+            
+            <div class="login-content">
+                <p class="login-description" style="margin-bottom: 30px;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--danger); display: block; margin-bottom: 20px;"></i>
+                    Lo sentimos, ha ocurrido un error en el servidor. Nuestro equipo ha sido notificado y estamos trabajando para solucionarlo.
+                </p>
+                
+                <% if (typeof error !== 'undefined' && error && process.env.NODE_ENV === 'development') { %>
+                    <div style="background: var(--dark-gray); padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: left;">
+                        <strong style="color: var(--danger);">Error (Solo visible en desarrollo):</strong>
+                        <pre style="margin-top: 10px; color: var(--accent-white); font-size: 0.85rem; overflow-x: auto;"><%= error %></pre>
+                    </div>
+                <% } %>
+                
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <a href="/dashboard" class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">
+                        <i class="fas fa-home"></i>
+                        Volver al Dashboard
+                    </a>
+                <% } else { %>
+                    <a href="/" class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">
+                        <i class="fas fa-home"></i>
+                        Volver al Inicio
+                    </a>
+                <% } %>
+                
+                <button onclick="location.reload()" class="btn btn-secondary" style="width: 100%;">
+                    <i class="fas fa-sync"></i>
+                    Reintentar
+                </button>
+            </div>
+            
+            <div class="login-footer">
+                <p>&copy; 2025 Wanted Roleplay. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

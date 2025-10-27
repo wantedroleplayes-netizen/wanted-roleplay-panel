@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interno - Wanted Roleplay Staff Panel</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .chat-container {
+            height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: var(--dark-gray);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .chat-message {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .chat-content {
+            flex: 1;
+        }
+        
+        .chat-username {
+            font-weight: 600;
+            color: var(--success);
+            margin-bottom: 5px;
+        }
+        
+        .chat-text {
+            background: var(--secondary-black);
+            padding: 10px 15px;
+            border-radius: 8px;
+            word-wrap: break-word;
+        }
+        
+        .chat-time {
+            font-size: 0.75rem;
+            color: var(--accent-white);
+            margin-top: 5px;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 15px;
+            background: var(--dark-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 1rem;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--white);
+        }
+        
+        .typing-indicator {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            color: var(--accent-white);
+            font-style: italic;
+            height: 35px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>🎮 WANTED RP</h2>
+            <p class="subtitle">Staff Panel</p>
+        </div>
+        
+        <div class="user-info">
+            <img src="<%= user.avatar ? `https://cdn.discordapp.com/avatars/${user.discord_id}/${user.avatar}.png` : '/img/default-avatar.png' %>" alt="Avatar" class="user-avatar">
+            <div class="user-details">
+                <p class="user-name"><%= user.username %></p>
+                <p class="user-role">Staff Member</p>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/bans" class="nav-item">
+                <i class="fas fa-ban"></i>
+                <span>Baneos</span>
+            </a>
+            <a href="/jails" class="nav-item">
+                <i class="fas fa-lock"></i>
+                <span>Jail</span>
+            </a>
+            <a href="/hackers" class="nav-item">
+                <i class="fas fa-user-secret"></i>
+                <span>Hackers</span>
+            </a>
+            <a href="/refunds" class="nav-item">
+                <i class="fas fa-undo"></i>
+                <span>Devoluciones</span>
+            </a>
+            <a href="/donations" class="nav-item">
+                <i class="fas fa-donate"></i>
+                <span>Donaciones</span>
+            </a>
+            <a href="/chat" class="nav-item active">
+                <i class="fas fa-comments"></i>
+                <span>Chat Interno</span>
+            </a>
+            <a href="/activity" class="nav-item">
+                <i class="fas fa-history"></i>
+                <span>Actividad</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="/auth/logout" class="btn btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <h1>💬 Chat Interno del Staff</h1>
+            <p class="page-subtitle">Comunicación en tiempo real con tu equipo</p>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="loading">Cargando mensajes...</div>
+                    </div>
+                    
+                    <div class="typing-indicator" id="typingIndicator"></div>
+                    
+                    <div class="chat-input-container">
+                        <input 
+                            type="text" 
+                            class="chat-input" 
+                            id="messageInput" 
+                            placeholder="Escribe un mensaje..."
+                            autocomplete="off"
+                        >
+                        <button class="btn btn-primary" onclick="sendMessage()" style="padding: 15px 30px;">
+                            <i class="fas fa-paper-plane"></i> Enviar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <link rel="stylesheet" href="/css/sweetalert-custom.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/chat.js"></script>
+</body>
+</html>

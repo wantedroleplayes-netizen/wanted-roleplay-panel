@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Wanted Roleplay Staff Panel</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>🎮 WANTED RP</h2>
+            <p class="subtitle">Staff Panel</p>
+        </div>
+        
+        <div class="user-info">
+            <img src="<%= user.avatar ? `https://cdn.discordapp.com/avatars/${user.discord_id}/${user.avatar}.png` : '/img/default-avatar.png' %>" alt="Avatar" class="user-avatar">
+            <div class="user-details">
+                <p class="user-name"><%= user.username %></p>
+                <p class="user-role">Staff Member</p>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/bans" class="nav-item">
+                <i class="fas fa-ban"></i>
+                <span>Baneos</span>
+            </a>
+            <a href="/jails" class="nav-item">
+                <i class="fas fa-lock"></i>
+                <span>Jail</span>
+            </a>
+            <a href="/hackers" class="nav-item">
+                <i class="fas fa-user-secret"></i>
+                <span>Hackers</span>
+            </a>
+            <a href="/refunds" class="nav-item">
+                <i class="fas fa-undo"></i>
+                <span>Devoluciones</span>
+            </a>
+            <a href="/donations" class="nav-item">
+                <i class="fas fa-donate"></i>
+                <span>Donaciones</span>
+            </a>
+            <a href="/chat" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span>Chat Interno</span>
+            </a>
+            <a href="/activity" class="nav-item">
+                <i class="fas fa-history"></i>
+                <span>Actividad</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="/auth/logout" class="btn btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <h1>📊 Dashboard</h1>
+            <p class="page-subtitle">Bienvenido, <%= user.username %></p>
+        </div>
+        
+        <div class="stats-grid" id="statsGrid">
+            <!-- Stats se cargarán dinámicamente -->
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-clock"></i> Actividad Reciente</h3>
+                </div>
+                <div class="card-body">
+                    <div id="recentActivity" class="activity-list">
+                        <div class="loading">Cargando...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-line"></i> Accesos Rápidos</h3>
+                </div>
+                <div class="card-body">
+                    <div class="quick-actions">
+                        <a href="/bans" class="quick-action">
+                            <i class="fas fa-ban"></i>
+                            <span>Registrar Baneo</span>
+                        </a>
+                        <a href="/jails" class="quick-action">
+                            <i class="fas fa-lock"></i>
+                            <span>Registrar Jail</span>
+                        </a>
+                        <a href="/hackers" class="quick-action">
+                            <i class="fas fa-user-secret"></i>
+                            <span>Reportar Hacker</span>
+                        </a>
+                        <a href="/refunds" class="quick-action">
+                            <i class="fas fa-undo"></i>
+                            <span>Nueva Devolución</span>
+                        </a>
+                        <a href="/donations" class="quick-action">
+                            <i class="fas fa-donate"></i>
+                            <span>Registrar Donación</span>
+                        </a>
+                        <a href="/chat" class="quick-action">
+                            <i class="fas fa-comments"></i>
+                            <span>Abrir Chat</span>
+                        </a>
+                        <a href="javascript:checkDiscordUser()" class="quick-action" style="background: linear-gradient(135deg, #5865F2, #4752C4);">
+                            <i class="fab fa-discord"></i>
+                            <span>Verificar Usuario</span>
+                        </a>
+                        <a href="javascript:manageWhitelist()" class="quick-action" style="background: linear-gradient(135deg, #00ff88, #00dd77);">
+                            <i class="fas fa-clipboard-check"></i>
+                            <span>Gestionar Whitelist</span>
+                        </a>
+                        <a href="/blacklist" class="quick-action" style="background: linear-gradient(135deg, #ff4444, #dd3333);">
+                            <i class="fas fa-ban"></i>
+                            <span>Ver Blacklist</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <link rel="stylesheet" href="/css/sweetalert-custom.css">
+    <script src="/js/main.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/discord-checker.js"></script>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

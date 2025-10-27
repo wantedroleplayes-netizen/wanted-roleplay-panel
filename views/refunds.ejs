@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refunds - Wanted Roleplay Staff Panel</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>🎮 WANTED RP</h2>
+            <p class="subtitle">Staff Panel</p>
+        </div>
+        
+        <div class="user-info">
+            <img src="<%= user.avatar ? `https://cdn.discordapp.com/avatars/${user.discord_id}/${user.avatar}.png` : '/img/default-avatar.png' %>" alt="Avatar" class="user-avatar">
+            <div class="user-details">
+                <p class="user-name"><%= user.username %></p>
+                <p class="user-role">Staff Member</p>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/bans" class="nav-item">
+                <i class="fas fa-ban"></i>
+                <span>Baneos</span>
+            </a>
+            <a href="/jails" class="nav-item">
+                <i class="fas fa-lock"></i>
+                <span>Jail</span>
+            </a>
+            <a href="/hackers" class="nav-item">
+                <i class="fas fa-user-secret"></i>
+                <span>Hackers</span>
+            </a>
+            <a href="/refunds" class="nav-item active">
+                <i class="fas fa-undo"></i>
+                <span>Devoluciones</span>
+            </a>
+            <a href="/donations" class="nav-item">
+                <i class="fas fa-donate"></i>
+                <span>Donaciones</span>
+            </a>
+            <a href="/chat" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span>Chat Interno</span>
+            </a>
+            <a href="/activity" class="nav-item">
+                <i class="fas fa-history"></i>
+                <span>Actividad</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="/auth/logout" class="btn btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <h1>💰 Devoluciones</h1>
+            <p class="page-subtitle">Gestiona solicitudes de devolución de jugadores</p>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-plus"></i> Nueva Devolución</h3>
+                <button class="btn btn-primary" onclick="toggleForm()">
+                    <i class="fas fa-plus"></i> Registrar Devolución
+                </button>
+            </div>
+            <div class="card-body" id="newRefundForm" style="display: none;">
+                <form onsubmit="createRefund(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre del Jugador *</label>
+                            <input type="text" class="form-control" name="player_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>ID del Jugador</label>
+                            <input type="text" class="form-control" name="player_id">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Razón de la Devolución *</label>
+                        <textarea class="form-control" name="reason" required placeholder="¿Por qué se solicita la devolución?"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Monto *</label>
+                            <input type="number" class="form-control" name="amount" required step="0.01" min="0" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Estado *</label>
+                            <select class="form-control" name="status" required>
+                                <option value="pending">Pendiente</option>
+                                <option value="approved">Aprobado</option>
+                                <option value="rejected">Rechazado</option>
+                                <option value="completed">Completado</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Artículos/Items</label>
+                        <textarea class="form-control" name="items" rows="3" placeholder="Lista los items o conceptos a devolver..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Notas Adicionales</label>
+                        <textarea class="form-control" name="notes" rows="3"></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Guardar Devolución
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="toggleForm()">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-list"></i> Lista de Devoluciones</h3>
+            </div>
+            <div class="card-body">
+                <div class="search-bar">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Buscar por nombre o ID de jugador...">
+                    <button class="btn btn-primary" onclick="searchRefunds()">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                    <button class="btn btn-secondary" onclick="loadRefunds()">
+                        <i class="fas fa-sync"></i> Ver Todas
+                    </button>
+                    <select class="form-control" id="statusFilter" onchange="filterByStatus()" style="max-width: 200px;">
+                        <option value="">Todos los estados</option>
+                        <option value="pending">Pendientes</option>
+                        <option value="approved">Aprobados</option>
+                        <option value="rejected">Rechazados</option>
+                        <option value="completed">Completados</option>
+                    </select>
+                </div>
+                
+                <div id="refundsTable">
+                    <div class="loading">Cargando devoluciones...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <link rel="stylesheet" href="/css/sweetalert-custom.css">
+    <script src="/js/main.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/refunds.js"></script>
+</body>
+</html>
